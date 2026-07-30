@@ -41,7 +41,10 @@ function renderChart(svgEl, tickLayerEl, computedRows, results) {
     const label = document.createElement('div');
     label.className = 'axis-tick axis-tick-x';
     label.style.left = ((x / CW) * 100) + '%';
-    label.style.top = (((MT + PLOT_H + 22) / CH) * 100) + '%';
+    // ระยะห่างจากเส้นแกน x เท่ากับที่ตัวเลขแกน y ห่างจากเส้นแกน y ตอนแสดงผลจริง
+    // (offset นี้อยู่ในหน่วย viewBox 480 แต่ svg ถูกยืดไม่เท่ากันทั้ง 2 แกน (preserveAspectRatio="none")
+    // จึงต้องคูณด้วยอัตราส่วนสเกล x/y ของ container ก่อน ไม่ใช้ 12 ตรงๆ)
+    label.style.top = (((MT + PLOT_H + 13.4) / CH) * 100) + '%';
     label.textContent = String(Number(v.toFixed(3)));
     tickLayerEl.appendChild(label);
   }
