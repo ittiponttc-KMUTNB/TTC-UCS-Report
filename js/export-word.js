@@ -35,7 +35,7 @@ async function exportWord(s, c, chartSvgEl) {
     '<body style="font-family:Tahoma,sans-serif;font-size:11pt;">' +
     '<div style="text-align:center;">' + (logoData ? '<img src="' + logoData + '" style="width:70px;"><br/>' : '') +
     '<h3 style="margin:4px 0;">KING MONGKUT\'S UNIVERSITY OF TECHNOLOGY NORTH BANGKOK</h3><div>DEPARTMENT OF TEACHER TRAINING IN CIVIL ENGINEERING</div></div>' +
-    '<h4 style="text-align:center;">Unconfined Compression Test (ASTM D2166-66)</h4>' +
+    '<h4 style="text-align:center;">Unconfined Compression Test (ASTM D2166)</h4>' +
     '<table style="border-collapse:collapse;width:100%;">' +
     row('Specimen from', s.proj.specimenFrom) + row('Project Name', s.proj.projectName) + row('Location', s.proj.location) +
     row('Column No. / Sample Number', s.proj.columnNo + ' / ' + s.proj.sampleNumber) + row('Depth', s.proj.depth) +
