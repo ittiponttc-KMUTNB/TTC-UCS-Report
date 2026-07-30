@@ -1,0 +1,226 @@
+/* style.css — ล้อสี/ระยะห่าง/ฟอนต์จาก mockup เดิมทุกจุด */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Sarabun', Tahoma, sans-serif;
+  background: #dfe3e8;
+}
+
+.page-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 40px;
+}
+
+/* ---------- Input panel (ไม่พิมพ์) ---------- */
+
+.input-panel {
+  width: 210mm;
+  max-width: 100%;
+  margin: 20px auto 0;
+  padding: 18px 22px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.18);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.input-panel-header h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  font-family: inherit;
+}
+.btn-dark { background: #111827; }
+.btn-blue { background: #2563eb; }
+.btn-navy { background: #1e40af; }
+.btn-green { background: #15803d; }
+.btn:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.grid-2-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sig-row-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+.field-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.field-box-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.field { font-size: 11px; color: #6b7280; display: block; }
+.field input, .field textarea, .field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  margin-top: 2px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: inherit;
+}
+.field-locked input { background-color: #cccccc; }
+
+.hint-text { font-size: 11px; color: #9ca3af; }
+.subsection-title { font-size: 13px; font-weight: 700; color: #374151; margin: 6px 0 2px; }
+
+.mode-row { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+.mode-options { display: flex; gap: 14px; align-items: center; font-size: 12.5px; color: #374151; }
+.mode-options label { display: flex; gap: 5px; align-items: center; }
+
+.inline-field { font-size: 11px; color: #6b7280; }
+.inline-field input { width: 110px; padding: 5px 7px; margin-left: 6px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 13px; }
+
+.paste-col { display: flex; flex-direction: column; gap: 6px; }
+.paste-col textarea { height: 56px; font-family: monospace; font-size: 12px; resize: vertical; }
+
+.rows-panel { max-height: 170px; overflow: auto; border: 1px solid #e5e7eb; border-radius: 6px; }
+.rows-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.rows-table thead tr { background: #f3f4f6; position: sticky; top: 0; }
+.rows-table th { padding: 5px 6px; text-align: left; }
+.rows-table td { padding: 4px 6px; border-top: 1px solid #f0f0f0; }
+.rows-table input { width: 70px; padding: 3px 5px; border: 1px solid #e5e7eb; border-radius: 4px; font-size: 12px; }
+.rows-table .row-idx { color: #9ca3af; }
+.remove-row-btn { border: none; background: none; color: #dc2626; cursor: pointer; font-size: 14px; }
+.add-row-btn { margin: 6px; padding: 5px 10px; background: #e5e7eb; border: none; border-radius: 5px; font-size: 12px; cursor: pointer; }
+
+.history-panel { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.history-panel select { padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 13px; min-width: 260px; }
+
+.save-status { font-size: 12px; min-height: 16px; }
+.save-status.ok { color: #15803d; }
+.save-status.err { color: #dc2626; }
+
+/* ---------- Report page (สำหรับพิมพ์) ---------- */
+
+.report-page {
+  width: 210mm;
+  min-height: 297mm;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 15mm 20mm;
+  margin: 20px auto 0;
+  box-shadow: 0 1px 10px rgba(0,0,0,.22);
+  color: #111827;
+  font-size: 10px;
+  line-height: 1.15;
+}
+
+.report-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-bottom: 2px solid #111;
+  padding-bottom: 5px;
+}
+.report-header img { width: 84px; height: 74px; object-fit: contain; flex-shrink: 0; }
+.report-header-center { flex: 1; text-align: center; }
+.report-header-center .name-en { font-size: 13.5px; font-weight: 700; letter-spacing: .2px; }
+.report-header-center .dept-en { font-size: 11.5px; font-weight: 600; margin-top: 1px; }
+.report-header-center .addr { font-size: 9px; margin-top: 2px; color: #374151; }
+.report-header-jobno { width: 100px; flex-shrink: 0; text-align: right; font-size: 9.5px; font-weight: 300; color: #C0C1C4; }
+
+.report-title { text-align: center; font-size: 12px; font-weight: 700; margin: 6px 0 6px; text-decoration: underline; }
+
+.report-info-table, .cement-table, .data-report-table, .results-table {
+  width: 100%; border-collapse: collapse; font-size: 9.5px; margin-bottom: 5px;
+}
+.report-info-table td { border: 1px solid #000; padding: 1px 6px; }
+.report-info-table td.label { font-weight: 600; }
+
+.report-two-col { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6px; margin-bottom: 4px; }
+
+.data-report-table th, .data-report-table td { border: 1px solid #000; padding: 1px 4px; text-align: center; }
+.data-report-table thead tr { background: #f3f4f6; }
+
+.cement-table td { border: 1px solid #000; padding: 1px 6px; }
+.cement-table .section-head { font-weight: 700; background: #f3f4f6; }
+
+.chart-row { display: flex; gap: 8px; margin-bottom: 5px; align-items: flex-start; }
+.chart-box { border: 1px solid #000; padding: 4px; width: 412px; }
+.chart-box-title { text-align: center; font-size: 9.5px; font-weight: 600; margin-bottom: 1px; }
+.chart-canvas-wrap { position: relative; width: 367px; height: 247px; margin: 0 auto; }
+.chart-canvas-wrap svg { width: 100%; height: 100%; display: block; }
+.axis-tick { position: absolute; font-size: 9px; color: #6b7280; white-space: nowrap; }
+.axis-tick-x { transform: translate(-50%, 0); }
+.axis-tick-y { transform: translate(-100%, -50%); }
+.chart-tooltip {
+  position: absolute; display: none;
+  transform: translate(6px, -26px);
+  background: #111827; opacity: .9; color: #fff;
+  font-size: 10.5px; padding: 3px 6px; border-radius: 4px; white-space: nowrap;
+}
+
+.photo-box { border: 1px solid #000; padding: 4px; width: 203px; display: flex; flex-direction: column; align-items: center; }
+.photo-box-title { font-size: 9px; font-weight: 600; text-align: center; margin-bottom: 3px; background-color: #DCD8D8; width: 177px; padding: 2px 0; }
+.photo-slot {
+  width: 170px; height: 238px; border: 1px dashed #9ca3af; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  cursor: pointer; background: #fafafa; position: relative;
+}
+.photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+.photo-slot .placeholder-text { font-size: 10px; color: #9ca3af; text-align: center; padding: 6px; }
+.photo-slot input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.results-table { width: 422px; }
+.results-table td { border: 1px solid #000; padding: 2px 6px; }
+.results-table td.label { font-weight: 600; }
+.results-table td.value { text-align: center; font-weight: 800; }
+
+.remarks-block { font-size: 9px; margin-bottom: 7px; }
+
+.sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; font-size: 10px; }
+.sig-line { border-bottom: 1px solid #111; height: 65px; text-align: left; }
+.sig-line .note { font-size: 9px; padding: 2px; }
+.sig-role { margin-top: 2px; }
+
+/* ---------- Print ---------- */
+
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { margin: 0; padding: 0; background: #fff; }
+  .no-print { display: none !important; }
+  .report-page { box-shadow: none !important; margin: 0 !important; width: auto !important; }
+}
+
+a { color: #1d4ed8; text-decoration: underline; }
+a:hover { color: #1e40af; }

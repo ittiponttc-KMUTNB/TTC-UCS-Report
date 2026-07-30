@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UCS Test Report Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ============ Input panel (ไม่พิมพ์) ============ -->
+  <div class="input-panel no-print">
+    <div class="input-panel-header">
+      <h2>ข้อมูลนำเข้า และ เครื่องมือ (ส่วนนี้ไม่ถูกพิมพ์)</h2>
+      <div class="btn-row">
+        <button id="btnPrint" class="btn btn-dark">พิมพ์ / Save PDF</button>
+        <button id="btnExportWord" class="btn btn-navy">Export Word</button>
+        <button id="btnExportExcel" class="btn btn-green">Export Excel</button>
+        <button id="btnDownloadBackup" class="btn btn-blue">ดาวน์โหลด Backup</button>
+        <label class="btn btn-dark" style="cursor:pointer;">นำเข้า Backup
+          <input type="file" id="importBackupInput" accept=".json" style="display:none;">
+        </label>
+      </div>
+    </div>
+
+    <div class="history-panel">
+      <span id="backupStatus" class="save-status"></span>
+    </div>
+
+    <div class="grid-2">
+      <div class="field-box">
+        <div class="field-box-title">ข้อมูลโครงการ (Project Info)</div>
+        <label class="field">Specimen from<input id="pSpecimenFrom" data-path="proj.specimenFrom"></label>
+        <label class="field">Project Name<input id="pProjectName" data-path="proj.projectName"></label>
+        <label class="field">Location<input id="pLocation" data-path="proj.location"></label>
+        <div class="grid-2-inner">
+          <label class="field">Column No.<input id="pColumnNo" data-path="proj.columnNo"></label>
+          <label class="field">Sample Number<input id="pSampleNumber" data-path="proj.sampleNumber"></label>
+          <label class="field">Depth<input id="pDepth" data-path="proj.depth"></label>
+          <label class="field">Shearing Rate<input id="pShearingRate" data-path="proj.shearingRate"></label>
+          <label class="field">Tested by<input id="pTestedBy" data-path="proj.testedBy"></label>
+          <label class="field field-locked">เลขที่ใบงาน<input id="pJobNo" data-path="proj.jobNo" placeholder=".... / ...."></label>
+          <label class="field">Date of Jetting<input id="pDateOfJetting" type="date" data-path="proj.dateOfJetting"></label>
+          <label class="field">Date of Testing<input id="pDateOfTesting" type="date" data-path="proj.dateOfTesting"></label>
+        </div>
+        <div class="hint-text">Curing Time (auto): <span id="pCuringDays">-</span> days</div>
+      </div>
+
+      <div class="field-box">
+        <div class="field-box-title">ขนาดตัวอย่าง &amp; Cement Mixing</div>
+        <div class="grid-3">
+          <label class="field">Diameter D (cm)<input id="sDiameter" type="number" step="0.001" data-path="sample.diameter"></label>
+          <label class="field">Height H (cm)<input id="sHeight" type="number" step="0.001" data-path="sample.height"></label>
+          <label class="field">Weight W (g)<input id="sWeight" type="number" step="0.01" data-path="sample.weight"></label>
+        </div>
+        <div class="hint-text">Area <span id="areaVal">-</span> cm2 · Volume <span id="volumeVal">-</span> cm3 · γt <span id="wetUnitWeightVal">-</span> g/cm3 · γd <span id="dryUnitWeightVal">-</span> g/cm3</div>
+        <label class="field">Mixed Jet Mixing (kg/m3)<input id="cMixedJetMixing" type="number" step="1" data-path="cement.mixedJetMixing"></label>
+
+        <div class="subsection-title">Water Content Determination</div>
+        <div class="grid-2-inner">
+          <label class="field">Container No.<input id="wContainerNo" data-path="water.containerNo"></label>
+          <label class="field">Weight of Can (g)<input id="wWeightOfCan" type="number" step="0.01" data-path="water.weightOfCan"></label>
+          <label class="field">Can + Wet Soil (g)<input id="wWeightOfCanWetSoil" type="number" step="0.01" data-path="water.weightOfCanWetSoil"></label>
+          <label class="field">Can + Dry Soil (g)<input id="wWeightOfCanDrySoil" type="number" step="0.01" data-path="water.weightOfCanDrySoil"></label>
+        </div>
+        <div class="hint-text">Water <span id="weightOfWaterVal">-</span> g · Dry soil <span id="weightOfDrySoilVal">-</span> g · w = <span id="waterContentVal">-</span> %</div>
+      </div>
+    </div>
+
+    <div class="field-box">
+      <div class="field-box-title">Load – Deformation Data</div>
+      <div class="mode-row">
+        <div class="mode-options">
+          <label><input type="radio" name="mode" id="modeDivision" value="division">Division × Factor K</label>
+          <label><input type="radio" name="mode" id="modeKg" value="kg">Load (kg) โดยตรง</label>
+        </div>
+        <label class="inline-field">Factor K (kg/division)<input id="tFactorK" type="number" step="0.0001" data-path="test.factorK"></label>
+        <label class="inline-field">Proving Ring / Load cell (kN)<input id="tProvingRingCapacity" type="number" step="1" data-path="test.provingRingCapacity"></label>
+      </div>
+
+      <div class="grid-2">
+        <div class="paste-col">
+          <div class="hint-text">วางข้อมูล 2 คอลัมน์จาก Excel (Deformation, Reading/Load) — คั่นด้วย Tab</div>
+          <textarea id="pasteText" placeholder="0&#9;0&#10;0.1&#9;9&#10;0.2&#9;24"></textarea>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button id="btnParsePaste" class="btn btn-dark" style="padding:6px 12px;">Parse &amp; Fill</button>
+            <label style="font-size:12px;color:#374151;display:flex;align-items:center;gap:6px;">อัปโหลด CSV/XLSX
+              <input id="fileUpload" type="file" accept=".csv,.xlsx">
+            </label>
+          </div>
+        </div>
+
+        <div class="rows-panel">
+          <table class="rows-table">
+            <thead><tr><th>#</th><th>Deformation (mm)</th><th>Reading/Load</th><th></th></tr></thead>
+            <tbody id="rowsBody"></tbody>
+          </table>
+          <button id="btnAddRow" class="add-row-btn">+ Add row</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-row-grid">
+      <label class="field">Test by<input id="sigTestBy" data-path="sig.testBy"></label>
+      <label class="field">Controlled Test by<input id="sigControlledBy" data-path="sig.controlledBy"></label>
+      <label class="field">Notified by<input id="sigNotifiedBy" data-path="sig.notifiedBy"></label>
+    </div>
+  </div>
+
+  <!-- ============ Report page (พิมพ์ได้) ============ -->
+  <div class="report-page" data-report-page>
+    <div class="report-header">
+      <img src="assets/kmutnb-logo.png" alt="KMUTNB logo">
+      <div class="report-header-center">
+        <div class="name-en">KING MONGKUT'S UNIVERSITY OF TECHNOLOGY NORTH BANGKOK</div>
+        <div class="dept-en">DEPARTMENT OF TEACHER TRAINING IN CIVIL ENGINEERING</div>
+        <div class="addr">1518 Pracharat 1 Road, Wongsawang, Bangsue, Bangkok 10800, THAILAND</div>
+        <div class="addr">Telephone and Fax :02-555-2000 ext 3247,3253, Fax. 02-587-8260</div>
+      </div>
+      <div class="report-header-jobno">เลขที่ใบงาน<br><span id="rJobNo"></span></div>
+    </div>
+
+    <div class="report-title">Unconfined Compression Test (ASTM D2166-66)</div>
+
+    <table class="report-info-table">
+      <tbody>
+        <tr><td class="label" style="width:16%;">Specimen from :</td><td colspan="3" id="rSpecimenFrom"></td></tr>
+        <tr><td class="label">Project Name :</td><td colspan="3" id="rProjectName"></td></tr>
+        <tr><td class="label">Location :</td><td colspan="3" id="rLocation"></td></tr>
+        <tr>
+          <td class="label">Column No. :</td><td id="rColumnNo" style="width:34%;"></td>
+          <td class="label" style="width:16%;">Sample Number :</td><td id="rSampleNumber"></td>
+        </tr>
+        <tr>
+          <td class="label">Depth :</td><td id="rDepth"></td>
+          <td class="label">Shearing Rate :</td><td id="rShearingRate"></td>
+        </tr>
+        <tr>
+          <td class="label">Date of Jetting :</td><td id="rDateOfJetting"></td>
+          <td class="label">Date of Testing :</td><td id="rDateOfTesting"></td>
+        </tr>
+        <tr>
+          <td class="label">Curing Time :</td><td><span id="rCuringDays"></span> days</td>
+          <td class="label">Tested by :</td><td id="rTestedBy"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="report-two-col">
+      <div>
+        <table class="data-report-table">
+          <thead>
+            <tr>
+              <th>No.</th><th>Deformation<br>R (mm.)</th><th>Axial Load<br>P (kg)</th>
+              <th>Strain<br>ε (%)</th><th>Corrected<br>Area (cm<sup>2</sup>)</th><th>Stress σ<br>(ksc)</th>
+            </tr>
+          </thead>
+          <tbody id="reportRowsBody"></tbody>
+        </table>
+      </div>
+
+      <div>
+        <table class="cement-table">
+          <tbody>
+            <tr><td colspan="2" class="section-head">Cement Mixing Descriptions</td></tr>
+            <tr><td>Cement Content</td><td style="font-weight:800;"><span id="rMixedJetMixing"></span> kg/m<sup>3</sup></td></tr>
+            <tr><td colspan="2" style="font-style:italic;">Soil-Jet Mixing Sample</td></tr>
+            <tr><td>Diameter, D</td><td><span id="rDiameter"></span> cm.</td></tr>
+            <tr><td>Height, H</td><td><span id="rHeight"></span> cm.</td></tr>
+            <tr><td>Area, A</td><td><span id="rAreaVal"></span> cm<sup>2</sup></td></tr>
+            <tr><td>Volume, V = A × H</td><td><span id="rVolumeVal"></span> cm<sup>3</sup></td></tr>
+            <tr><td>Weight of Sample, W</td><td><span id="rWeight"></span> g</td></tr>
+            <tr><td>Wet Unit Weight, γt = W/V</td><td><span id="rWetUnitWeightVal"></span> g/cm<sup>3</sup></td></tr>
+            <tr><td>Dry Unit Weight, γd = γt /(1+(w/100))</td><td><span id="rDryUnitWeightVal"></span> g/cm<sup>3</sup></td></tr>
+            <tr><td>Water Content, w</td><td><span id="rWaterContentVal"></span> %</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Stress – Strain Curve</div>
+        <div class="chart-canvas-wrap" id="chartWrap">
+          <svg id="chartSvg" viewBox="0 0 640 480" preserveAspectRatio="none"></svg>
+          <div id="chartTooltip" class="chart-tooltip"></div>
+        </div>
+      </div>
+      <div class="photo-box">
+        <div class="photo-box-title">Failure of Soil-Jet Mixing Sample</div>
+        <div class="photo-slot" id="photoSlot">
+          <span class="placeholder-text" id="photoPlaceholder">คลิกเพื่อเลือกรูป<br>After Test</span>
+          <img id="photoPreview" style="display:none;">
+          <input type="file" id="photoInput" accept="image/*">
+        </div>
+      </div>
+    </div>
+
+    <table class="results-table">
+      <tbody id="resultsBody"></tbody>
+    </table>
+
+    <div class="remarks-block">Remarks<br>1. The testing results are good only for those specimens tested.</div>
+
+    <div class="sig-grid">
+      <div>
+        <div class="sig-line"><div class="note">2. Not valid unless signed and sealed.</div></div>
+        <div class="sig-role">Test by:</div>
+        <div>( <span id="rSigTestBy"></span> )</div>
+      </div>
+      <div>
+        <div class="sig-line"></div>
+        <div class="sig-role">Controlled Test by:</div>
+        <div>( <span id="rSigControlledBy"></span> )</div>
+      </div>
+      <div>
+        <div class="sig-line"></div>
+        <div class="sig-role">Notified by:</div>
+        <div>( <span id="rSigNotifiedBy"></span> )</div>
+        <div id="rSigHeadTitle"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SheetJS: อ่าน/สร้างไฟล์ Excel -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/export-word.js"></script>
+<script src="js/export-excel.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
