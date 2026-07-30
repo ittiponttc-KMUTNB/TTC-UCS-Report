@@ -258,6 +258,31 @@ function bindPhotoUpload() {
   });
 }
 
+// ---------- Print: บังคับให้จบภายใน 1 หน้า A4 เสมอ ----------
+// ถ้ามี Load-Deformation หลายแถวจนเนื้อหาสูงเกิน 297mm ให้ย่อขนาด (scale) แทนที่จะปล่อยให้ล้นไปหน้า 2
+// ".print-frame" (ครอบ .report-page) มี height:297mm + overflow:hidden ตอนพิมพ์ (ดู style.css)
+// จึงตัดส่วนเกินทิ้งได้จริง ไม่ใช่แค่ทำให้ดูเล็กลงเฉยๆ
+
+function applyPrintScale() {
+  const page = document.querySelector('[data-report-page]');
+  if (!page) return;
+  page.style.transform = '';
+  const rect = page.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const pxPerMm = rect.width / 210; // .report-page กว้าง 210mm เสมอทั้งจอและตอนพิมพ์
+  const heightMm = rect.height / pxPerMm;
+  if (heightMm > 297) {
+    const scale = 297 / heightMm;
+    page.style.transform = `scale(${scale})`;
+  }
+}
+
+window.addEventListener('beforeprint', applyPrintScale);
+window.addEventListener('afterprint', () => {
+  const page = document.querySelector('[data-report-page]');
+  if (page) page.style.transform = '';
+});
+
 // ---------- Buttons: Print / Export ----------
 
 function bindActionButtons() {

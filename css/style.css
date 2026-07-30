@@ -48,6 +48,8 @@ body {
 
 .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
+.app-credit { font-size: 10px; color: #9ca3af; }
+
 .btn {
   padding: 8px 14px;
   border: none;
@@ -218,11 +220,15 @@ body {
 
 /* ---------- Print ---------- */
 
+.report-page { transform-origin: top left; }
+
 @page { size: A4; margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: #fff; }
   .no-print { display: none !important; }
   .report-page { box-shadow: none !important; margin: 0 !important; width: auto !important; }
+  /* บังคับให้ report-page ยาวไม่เกิน 1 หน้า A4 เสมอ ส่วนเกิน (ถ้ามี) จะถูกย่อขนาดแทนการล้นไปหน้า 2 (ดู applyPrintScale ใน app.js) */
+  .print-frame { width: 210mm; height: 297mm; overflow: hidden; }
 }
 
 a { color: #1d4ed8; text-decoration: underline; }
