@@ -169,6 +169,22 @@ function curingDays(dateOfJetting, dateOfTesting) {
   return Math.round((b - a) / 86400000);
 }
 
+const EN_MONTHS_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const TH_MONTHS_ABBR = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+// แสดงวันที่ในรายงานเป็น "DD-MonAbbr-YY (D ThMonAbbr. YY พ.ศ.)" เช่น "27-Apr-21 (27 เม.ย. 64)"
+function formatReportDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00'); // กัน timezone เลื่อนวันที่
+  if (isNaN(d)) return dateStr;
+  const day = d.getDate();
+  const day2 = String(day).padStart(2, '0');
+  const month = d.getMonth();
+  const enYY = String(d.getFullYear() % 100).padStart(2, '0');
+  const thYY = String((d.getFullYear() + 543) % 100).padStart(2, '0');
+  return `${day2}-${EN_MONTHS_ABBR[month]}-${enYY} (${day} ${TH_MONTHS_ABBR[month]} ${thYY})`;
+}
+
 // รูปแบบที่วาง: คอลัมน์แรก = Deformation (mm), คอลัมน์ที่สอง = Reading/Load
 function parseTextToRows(text) {
   const lines = String(text).split(/\r?\n/).map((l) => l.trim()).filter(Boolean);

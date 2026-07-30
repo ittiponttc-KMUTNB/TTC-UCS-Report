@@ -80,8 +80,8 @@ function render() {
   $('rSampleNumber').textContent = s.proj.sampleNumber;
   $('rDepth').textContent = s.proj.depth;
   $('rShearingRate').textContent = s.proj.shearingRate;
-  $('rDateOfJetting').textContent = s.proj.dateOfJetting;
-  $('rDateOfTesting').textContent = s.proj.dateOfTesting;
+  $('rDateOfJetting').textContent = formatReportDate(s.proj.dateOfJetting);
+  $('rDateOfTesting').textContent = formatReportDate(s.proj.dateOfTesting);
   $('rCuringDays').textContent = curingDays(s.proj.dateOfJetting, s.proj.dateOfTesting);
   $('rTestedBy').textContent = s.proj.testedBy;
 
