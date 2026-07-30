@@ -392,10 +392,11 @@ function sanitizeFilenamePart(s) {
 
 function buildBackupFilename() {
   const jobNo = sanitizeFilenamePart(state.proj.jobNo) || 'noJob';
-  const specimen = sanitizeFilenamePart(state.proj.specimenFrom).slice(0, 5) || 'na';
-  const project = sanitizeFilenamePart(state.proj.projectName).slice(0, 5) || 'na';
+  const specimen = sanitizeFilenamePart(state.proj.specimenFrom).slice(0, 10) || 'na';
+  const project = sanitizeFilenamePart(state.proj.projectName).slice(0, 15) || 'na';
+  const columnNo = sanitizeFilenamePart(state.proj.columnNo) || 'na';
   const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD กันชื่อไฟล์ซ้ำถ้าดาวน์โหลดหลายครั้ง
-  return `UCS_No${jobNo}_${specimen}_${project}_${date}.json`;
+  return `UCS_No${jobNo}_${specimen}_${project}_Col No.${columnNo}_${date}.json`;
 }
 
 function downloadBackup() {
