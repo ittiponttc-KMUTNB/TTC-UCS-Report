@@ -324,16 +324,27 @@ function buildBackupObject(c) {
   };
 }
 
+// กันอักขระที่ใช้เป็นชื่อไฟล์ไม่ได้ (Windows/Mac ตีความ / เป็น folder separator ฯลฯ)
+function sanitizeFilenamePart(s) {
+  return String(s || '').replace(/[\\/:*?"<>|]/g, '-').trim();
+}
+
+function buildBackupFilename() {
+  const jobNo = sanitizeFilenamePart(state.proj.jobNo) || 'noJob';
+  const specimen = sanitizeFilenamePart(state.proj.specimenFrom).slice(0, 5) || 'na';
+  const project = sanitizeFilenamePart(state.proj.projectName).slice(0, 5) || 'na';
+  const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD กันชื่อไฟล์ซ้ำถ้าดาวน์โหลดหลายครั้ง
+  return `UCS_No${jobNo}_${specimen}_${project}_${date}.json`;
+}
+
 function downloadBackup() {
   const c = recompute();
   const backup = buildBackupObject(c);
   const json = JSON.stringify(backup, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const a = document.createElement('a');
-  const safeSample = (state.proj.sampleNumber || 'sample').replace(/[^\w-]+/g, '_');
-  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
   a.href = URL.createObjectURL(blob);
-  a.download = `UCS_Backup_${safeSample}_${stamp}.json`;
+  a.download = buildBackupFilename();
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
