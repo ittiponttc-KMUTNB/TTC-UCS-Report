@@ -145,6 +145,8 @@ body {
   color: #111827;
   font-size: 10px;
   line-height: 1.15;
+  display: flex;
+  flex-direction: column;
 }
 
 .report-header {
@@ -213,7 +215,7 @@ body {
 
 .remarks-block { font-size: 9px; margin-bottom: 7px; }
 
-.sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; font-size: 10px; }
+.sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; font-size: 10px; margin-top: auto; padding-top: 12px; }
 .sig-line { border-bottom: 1px solid #111; height: 65px; text-align: left; }
 .sig-line .note { font-size: 9px; padding: 2px; }
 .sig-role { margin-top: 2px; }

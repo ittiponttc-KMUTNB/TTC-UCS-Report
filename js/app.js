@@ -130,6 +130,8 @@ function render() {
 
   // --- Rows editor table ---
   renderRowsEditor();
+
+  scheduleAutosave();
 }
 
 function renderRowsEditor() {
@@ -299,6 +301,65 @@ function bindActionButtons() {
   });
 }
 
+// ---------- Autosave draft (localStorage) ----------
+// กันข้อมูลหายถ้าลืมกด "ดาวน์โหลด Backup" แล้วปิดแท็บ/รีเฟรชไปเฉยๆ
+// เก็บเป็น draft ชั่วคราวใน browser เท่านั้น ไม่ใช่ของแทน backup .json ตัวจริง
+
+const AUTOSAVE_KEY = 'ucsAutosaveDraft';
+let autosaveTimer = null;
+
+function hasMeaningfulData() {
+  const p = state.proj;
+  if (p.specimenFrom || p.projectName || p.location || p.columnNo || p.sampleNumber || p.jobNo) return true;
+  if (state.sample.diameter || state.sample.height || state.sample.weight) return true;
+  if (state.rows.some((r) => r.reading || r.deformation)) return true;
+  return false;
+}
+
+function saveAutosaveDraft() {
+  if (!hasMeaningfulData()) return;
+  try {
+    const draft = {
+      savedAt: new Date().toISOString(),
+      state: {
+        proj: state.proj, sample: state.sample, cement: state.cement, water: state.water,
+        test: state.test, curve: state.curve, rows: state.rows, sig: state.sig,
+        photoDataUrl: state.photoDataUrl,
+      },
+    };
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(draft));
+  } catch (e) { /* localStorage เต็ม/ถูกปิดใช้งาน - ไม่ critical ปล่อยผ่าน */ }
+}
+
+function scheduleAutosave() {
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(saveAutosaveDraft, 500);
+}
+
+function clearAutosaveDraft() {
+  try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) {}
+}
+
+function loadAutosaveDraftIfAny() {
+  let raw;
+  try { raw = localStorage.getItem(AUTOSAVE_KEY); } catch (e) { return; }
+  if (!raw) return;
+  let draft;
+  try { draft = JSON.parse(raw); } catch (e) { clearAutosaveDraft(); return; }
+  if (!draft || !draft.state) { clearAutosaveDraft(); return; }
+  const when = draft.savedAt ? new Date(draft.savedAt).toLocaleString('th-TH') : 'ไม่ทราบเวลา';
+  const ok = window.confirm(
+    `พบข้อมูลที่กรอกค้างไว้จากการใช้งานครั้งก่อน (บันทึกอัตโนมัติเมื่อ ${when})\n` +
+    'ซึ่งยังไม่เคยกด "ดาวน์โหลด Backup" สำหรับข้อมูลชุดนี้\n\n' +
+    'ต้องการกู้ข้อมูลนี้กลับมาหรือไม่?'
+  );
+  if (ok) {
+    applyBackupObject({ schema: 'ucs-test-backup', state: draft.state });
+  } else {
+    clearAutosaveDraft();
+  }
+}
+
 // ---------- Backup: Download / Import (ไฟล์ .json เก็บเอง ไม่มี cloud) ----------
 
 function buildBackupObject(c) {
@@ -349,6 +410,7 @@ function downloadBackup() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
+  clearAutosaveDraft(); // backup ตัวจริงถูกดาวน์โหลดแล้ว ไม่ต้องกันด้วย draft ฉบับร่างอีกต่อไป
 
   const statusEl = $('backupStatus');
   statusEl.className = 'save-status ok';
@@ -409,6 +471,7 @@ function init() {
   bindPhotoUpload();
   bindActionButtons();
   bindBackupButtons();
+  loadAutosaveDraftIfAny();
   render();
 }
 
