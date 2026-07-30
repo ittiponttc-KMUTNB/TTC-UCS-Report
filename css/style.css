@@ -174,11 +174,11 @@ body {
 .data-report-table th, .data-report-table td { border: 1px solid #000; padding: 1px 4px; text-align: center; }
 .data-report-table thead tr { background: #f3f4f6; }
 
-.cement-table td { border: 1px solid #000; padding: 1px 6px; }
-.cement-table .section-head { font-weight: 700; background: #f3f4f6; }
-.cement-table td:first-child { width: 56%; }
-.cement-table td.value { width: 24%; text-align: center; }
-.cement-table td:last-child:not(:first-child) { width: 20%; }
+.cement-table td { border: 1px solid #000; padding: 1px 6px; white-space: nowrap; }
+.cement-table .section-head { font-weight: 700; background: #f3f4f6; white-space: normal; }
+.cement-table td:first-child { width: 62%; }
+.cement-table td.value { width: 20%; text-align: center; }
+.cement-table td:last-child:not(:first-child) { width: 18%; }
 
 .chart-row { display: flex; gap: 8px; margin-bottom: 5px; align-items: flex-start; }
 .chart-box { border: 1px solid #000; padding: 4px; width: 412px; }
