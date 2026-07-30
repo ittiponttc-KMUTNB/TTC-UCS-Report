@@ -87,13 +87,13 @@ function render() {
 
   // --- Cement / sample table ---
   $('rMixedJetMixing').textContent = s.cement.mixedJetMixing;
-  $('rDiameter').textContent = s.sample.diameter;
-  $('rHeight').textContent = s.sample.height;
-  $('rAreaVal').textContent = fmt(c.geometry.area, 3);
+  $('rDiameter').textContent = fmt(s.sample.diameter, 2);
+  $('rHeight').textContent = fmt(s.sample.height, 2);
+  $('rAreaVal').textContent = fmt(c.geometry.area, 2);
   $('rVolumeVal').textContent = fmt(c.geometry.volume, 2);
-  $('rWeight').textContent = s.sample.weight;
-  $('rWetUnitWeightVal').textContent = fmt(c.geometry.wetUnitWeight, 3);
-  $('rDryUnitWeightVal').textContent = fmt(c.dryUnitWeight, 3);
+  $('rWeight').textContent = fmt(s.sample.weight, 2);
+  $('rWetUnitWeightVal').textContent = fmt(c.geometry.wetUnitWeight, 2);
+  $('rDryUnitWeightVal').textContent = fmt(c.dryUnitWeight, 2);
   $('rWaterContentVal').textContent = fmt(c.water.waterContent, 2);
 
   // --- Load-deformation report table ---
