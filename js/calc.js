@@ -185,6 +185,13 @@ function formatReportDate(dateStr) {
   return `${day2}-${EN_MONTHS_ABBR[month]}-${enYY} (${day} ${TH_MONTHS_ABBR[month]} ${thYY})`;
 }
 
+// ผู้ใช้กรอกแค่ตัวเลข (เช่น 1 = 1%) รายงานแสดงเป็นประโยคเต็ม
+function formatShearingRate(v) {
+  const n = Number(v);
+  if (!isFinite(n) || v === '' || v === null) return '';
+  return `${n}% of sample height per minute`;
+}
+
 // รูปแบบที่วาง: คอลัมน์แรก = Deformation (mm), คอลัมน์ที่สอง = Reading/Load
 function parseTextToRows(text) {
   const lines = String(text).split(/\r?\n/).map((l) => l.trim()).filter(Boolean);

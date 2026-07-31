@@ -11,7 +11,7 @@ function exportExcel(s, c) {
     ['Unconfined Compression Test Report'], [],
     ['Specimen from', s.proj.specimenFrom], ['Project Name', s.proj.projectName], ['Location', s.proj.location],
     ['Column No.', s.proj.columnNo], ['Sample Number', s.proj.sampleNumber], ['Depth', s.proj.depth],
-    ['Shearing Rate', s.proj.shearingRate], ['Tested by', s.proj.testedBy],
+    ['Shearing Rate', formatShearingRate(s.proj.shearingRate)], ['Tested by', s.proj.testedBy],
     ['Date of Jetting', s.proj.dateOfJetting], ['Date of Testing', s.proj.dateOfTesting], ['Curing Time (days)', curingDays(s.proj.dateOfJetting, s.proj.dateOfTesting)],
     [],
     ['Mixed Jet Mixing (kg/m3)', Number(s.cement.mixedJetMixing) || s.cement.mixedJetMixing],

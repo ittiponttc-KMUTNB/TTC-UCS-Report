@@ -5,7 +5,7 @@
 const state = {
   proj: {
     specimenFrom: '', projectName: '', location: '', columnNo: '', sampleNumber: '',
-    depth: '', shearingRate: '', testedBy: '', dateOfJetting: '', dateOfTesting: '', jobNo: '',
+    depth: '', shearingRate: '1', testedBy: '', dateOfJetting: '', dateOfTesting: '', jobNo: '',
   },
   sample: { diameter: '', height: '', weight: '' },
   cement: { mixedJetMixing: '' },
@@ -79,7 +79,7 @@ function render() {
   $('rColumnNo').textContent = s.proj.columnNo;
   $('rSampleNumber').textContent = s.proj.sampleNumber;
   $('rDepth').textContent = s.proj.depth;
-  $('rShearingRate').textContent = s.proj.shearingRate;
+  $('rShearingRate').textContent = formatShearingRate(s.proj.shearingRate);
   $('rDateOfJetting').textContent = formatReportDate(s.proj.dateOfJetting);
   $('rDateOfTesting').textContent = formatReportDate(s.proj.dateOfTesting);
   $('rCuringDays').textContent = curingDays(s.proj.dateOfJetting, s.proj.dateOfTesting);

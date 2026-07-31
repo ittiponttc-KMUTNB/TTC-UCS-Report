@@ -39,7 +39,7 @@ async function exportWord(s, c, chartSvgEl) {
     '<table style="border-collapse:collapse;width:100%;">' +
     row('Specimen from', s.proj.specimenFrom) + row('Project Name', s.proj.projectName) + row('Location', s.proj.location) +
     row('Column No. / Sample Number', s.proj.columnNo + ' / ' + s.proj.sampleNumber) + row('Depth', s.proj.depth) +
-    row('Shearing Rate', s.proj.shearingRate) + row('Date of Jetting / Testing', s.proj.dateOfJetting + ' / ' + s.proj.dateOfTesting) +
+    row('Shearing Rate', formatShearingRate(s.proj.shearingRate)) + row('Date of Jetting / Testing', s.proj.dateOfJetting + ' / ' + s.proj.dateOfTesting) +
     row('Curing Time', curingDays(s.proj.dateOfJetting, s.proj.dateOfTesting) + ' days') + row('Tested by', s.proj.testedBy) +
     '</table>' +
     '<h4>Cement Mixing / Sample</h4><table style="border-collapse:collapse;width:100%;">' +
