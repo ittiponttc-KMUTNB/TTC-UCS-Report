@@ -483,17 +483,24 @@ function resetForNextSpecimen() {
   state.photoDataUrl = null;
 }
 
+// ไม่ใช้ window.confirm() เพราะ dialog แบบบล็อกของเบราว์เซอร์อาจถูกปิดใช้งาน/คืนค่า false
+// เงียบๆ ในบาง webview/หน้าต่าง preview แบบฝัง (sandboxed iframe) ทำให้กดแล้วดูเหมือนไม่มีอะไรเกิดขึ้น
+// ใช้วิธี "คลิกซ้ำเพื่อยืนยัน" ในตัวปุ่มเองแทน (กดครั้งแรกติดอาวุธ/รอ 4 วิ กดซ้ำถึงจะล้างจริง)
 function bindNextSpecimenButton() {
-  $('btnNextSpecimen').addEventListener('click', () => {
-    let hasUnsavedDraft = false;
-    try { hasUnsavedDraft = !!localStorage.getItem(AUTOSAVE_KEY); } catch (e) {}
-    if (hasUnsavedDraft) {
-      const proceed = window.confirm(
-        'ยังไม่ได้กด "ดาวน์โหลด Backup" สำหรับตัวอย่างปัจจุบัน ถ้าเริ่มตัวอย่างถัดไปตอนนี้ ข้อมูลตัวอย่างนี้จะหายไป\n\n' +
-        'ต้องการเริ่มตัวอย่างถัดไปโดยไม่บันทึกหรือไม่?'
-      );
-      if (!proceed) return;
-    }
+  const btn = $('btnNextSpecimen');
+  const defaultLabel = btn.textContent;
+  let confirmArmed = false;
+  let armTimer = null;
+
+  function disarm() {
+    confirmArmed = false;
+    clearTimeout(armTimer);
+    btn.textContent = defaultLabel;
+    btn.classList.remove('btn-confirm-danger');
+  }
+
+  function doReset() {
+    disarm(); // เคลียร์สถานะปุ่มเสมอ กันปุ่มค้างเป็นสีแดงหลังรีเซ็ตแล้ว
     resetForNextSpecimen();
     clearAutosaveDraft();
     syncPathInputsFromState();
@@ -502,6 +509,20 @@ function bindNextSpecimenButton() {
     const statusEl = $('backupStatus');
     statusEl.className = 'save-status ok';
     statusEl.textContent = 'เริ่มตัวอย่างใหม่แล้ว (ข้อมูลโครงการ/ผู้เซ็นชื่อ/ตั้งค่าเครื่องมือยังคงอยู่)';
+  }
+
+  btn.addEventListener('click', () => {
+    let hasUnsavedDraft = false;
+    try { hasUnsavedDraft = !!localStorage.getItem(AUTOSAVE_KEY); } catch (e) {}
+
+    if (!hasUnsavedDraft || confirmArmed) {
+      doReset();
+      return;
+    }
+    confirmArmed = true;
+    btn.textContent = 'ยังไม่ได้ Backup - คลิกซ้ำเพื่อยืนยัน';
+    btn.classList.add('btn-confirm-danger');
+    armTimer = setTimeout(disarm, 4000);
   });
 }
 

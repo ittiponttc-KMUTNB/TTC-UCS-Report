@@ -65,6 +65,7 @@ body {
 .btn-navy { background: #1e40af; }
 .btn-green { background: #15803d; }
 .btn-orange { background: #d97706; }
+.btn-confirm-danger { background: #dc2626 !important; }
 .btn:hover { filter: brightness(1.08); }
 .btn:disabled { opacity: .55; cursor: not-allowed; }
 
