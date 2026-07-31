@@ -461,6 +461,50 @@ function bindBackupButtons() {
   });
 }
 
+// ---------- ตัวอย่างถัดไป: คงข้อมูลระดับโครงการ ล้างเฉพาะข้อมูลเฉพาะตัวอย่าง ----------
+// เก็บไว้: proj.specimenFrom/projectName/location/shearingRate/testedBy, sig ทั้ง 3 คน,
+//          test.mode/factorK/provingRingCapacity (ตั้งค่าเครื่องมือ มักคงที่ทั้งโครงการ)
+// ล้างทิ้ง: Column No./Sample Number/Depth/วันที่/เลขที่ใบงาน, ขนาด/น้ำหนักตัวอย่าง,
+//          Cement Content, Water Content, แถวข้อมูลดิบ, รูป After Test
+
+function resetForNextSpecimen() {
+  state.proj = {
+    ...state.proj,
+    columnNo: '', sampleNumber: '', depth: '', dateOfJetting: '', dateOfTesting: '', jobNo: '',
+  };
+  state.sample = { diameter: '', height: '', weight: '' };
+  state.cement = { mixedJetMixing: '' };
+  state.water = { containerNo: '', weightOfCan: '', weightOfCanWetSoil: '', weightOfCanDrySoil: '' };
+  state.rows = [
+    { reading: '', deformation: '' },
+    { reading: '', deformation: '' },
+    { reading: '', deformation: '' },
+  ];
+  state.photoDataUrl = null;
+}
+
+function bindNextSpecimenButton() {
+  $('btnNextSpecimen').addEventListener('click', () => {
+    let hasUnsavedDraft = false;
+    try { hasUnsavedDraft = !!localStorage.getItem(AUTOSAVE_KEY); } catch (e) {}
+    if (hasUnsavedDraft) {
+      const proceed = window.confirm(
+        'ยังไม่ได้กด "ดาวน์โหลด Backup" สำหรับตัวอย่างปัจจุบัน ถ้าเริ่มตัวอย่างถัดไปตอนนี้ ข้อมูลตัวอย่างนี้จะหายไป\n\n' +
+        'ต้องการเริ่มตัวอย่างถัดไปโดยไม่บันทึกหรือไม่?'
+      );
+      if (!proceed) return;
+    }
+    resetForNextSpecimen();
+    clearAutosaveDraft();
+    syncPathInputsFromState();
+    showPhotoPreview(null);
+    render();
+    const statusEl = $('backupStatus');
+    statusEl.className = 'save-status ok';
+    statusEl.textContent = 'เริ่มตัวอย่างใหม่แล้ว (ข้อมูลโครงการ/ผู้เซ็นชื่อ/ตั้งค่าเครื่องมือยังคงอยู่)';
+  });
+}
+
 // ---------- Init ----------
 
 function init() {
@@ -472,6 +516,7 @@ function init() {
   bindPhotoUpload();
   bindActionButtons();
   bindBackupButtons();
+  bindNextSpecimenButton();
   loadAutosaveDraftIfAny();
   render();
 }

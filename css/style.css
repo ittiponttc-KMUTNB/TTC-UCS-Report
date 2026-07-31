@@ -64,6 +64,7 @@ body {
 .btn-blue { background: #2563eb; }
 .btn-navy { background: #1e40af; }
 .btn-green { background: #15803d; }
+.btn-orange { background: #d97706; }
 .btn:hover { filter: brightness(1.08); }
 .btn:disabled { opacity: .55; cursor: not-allowed; }
 
